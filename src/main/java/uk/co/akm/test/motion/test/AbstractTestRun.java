@@ -38,14 +38,6 @@ public abstract class AbstractTestRun implements TestRun {
     }
 
     @Override
-    public double resultErrorFraction(int index) {
-        final Result exact = exactResult(index);
-        final Result approx = approxResult(index);
-
-        return exact.absDifferenceFraction(approx);
-    }
-
-    @Override
     public final void runTest(int n) {
         final double t = duration();
         particle = initialState();
@@ -55,4 +47,12 @@ public abstract class AbstractTestRun implements TestRun {
     protected abstract double duration();
 
     protected abstract Particle initialState();
+
+    @Override
+    public final double resultErrorFraction(int index) {
+        final Result exact = exactResult(index);
+        final Result approx = approxResult(index);
+
+        return exact.absDifferenceFraction(approx);
+    }
 }

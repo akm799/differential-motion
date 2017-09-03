@@ -24,7 +24,9 @@ public final class DoubleResult implements Result {
     @Override
     public double absDifferenceFraction(Result other) {
         if (other instanceof DoubleResult) {
-            return Math.abs(absDifference(other)/value);
+            final double diff = absDifference(other);
+
+            return (value == 0 ? diff : diff/value);
         } else {
             throw new IllegalArgumentException("Input implementation class (" + other.getClass() + ") is not of type " + this.getClass());
         }

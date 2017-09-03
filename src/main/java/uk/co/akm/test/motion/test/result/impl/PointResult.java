@@ -42,7 +42,9 @@ public final class PointResult implements Result {
 
     @Override
     public double absDifferenceFraction(Result other) {
-        return absDifference(other)/r;
+        final double diff = absDifference(other);
+
+        return (r == 0 ? diff : diff/r);
     }
 
     @Override
