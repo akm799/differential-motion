@@ -2,6 +2,8 @@ package uk.co.akm.test.motion.test.examples;
 
 import uk.co.akm.test.motion.particle.Particle;
 import uk.co.akm.test.motion.particle.examples.Firecracker;
+import uk.co.akm.test.motion.test.result.Result;
+import uk.co.akm.test.motion.test.result.impl.DoubleResult;
 import uk.co.akm.test.motion.test.AbstractTestRun;
 
 /**
@@ -30,12 +32,12 @@ public final class FirecrackerTestRun extends AbstractTestRun {
     }
 
     @Override
-    public double exactResult(int index) {
-        return exactLength;
+    public Result exactResult(int index) {
+        return new DoubleResult(exactLength);
     }
 
     @Override
-    public double approxResult(int index) {
-        return particle.length();
+    public Result approxResult(int index) {
+        return new DoubleResult(particle.length());
     }
 }

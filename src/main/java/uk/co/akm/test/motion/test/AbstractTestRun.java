@@ -2,6 +2,7 @@ package uk.co.akm.test.motion.test;
 
 import uk.co.akm.test.motion.particle.MotionIntegrator;
 import uk.co.akm.test.motion.particle.Particle;
+import uk.co.akm.test.motion.test.result.Result;
 
 /**
  * Created by Thanos Mavroidis on 03/09/2017.
@@ -38,10 +39,10 @@ public abstract class AbstractTestRun implements TestRun {
 
     @Override
     public double resultErrorFraction(int index) {
-        final double exact = exactResult(index);
-        final double approx = approxResult(index);
+        final Result exact = exactResult(index);
+        final Result approx = approxResult(index);
 
-        return Math.abs((exact - approx)/exact);
+        return exact.absDifferenceFraction(approx);
     }
 
     @Override

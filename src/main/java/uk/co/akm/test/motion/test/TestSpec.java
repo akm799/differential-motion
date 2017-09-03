@@ -1,6 +1,7 @@
 package uk.co.akm.test.motion.test;
 
 
+import uk.co.akm.test.motion.test.result.Result;
 
 /**
  * Created by Thanos Mavroidis on 03/09/2017.
@@ -14,9 +15,9 @@ public interface TestSpec {
 
     int numberOfTestResults();
 
-    double exactResult(int index);
+    Result exactResult(int index);
 
-    double approxResult(int index);
+    Result approxResult(int index);
 
     double resultErrorFraction(int index);
 }

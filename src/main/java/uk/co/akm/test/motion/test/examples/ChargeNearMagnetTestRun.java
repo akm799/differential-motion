@@ -2,6 +2,8 @@ package uk.co.akm.test.motion.test.examples;
 
 import uk.co.akm.test.motion.particle.Particle;
 import uk.co.akm.test.motion.particle.examples.ChargeNearMagnet;
+import uk.co.akm.test.motion.test.result.Result;
+import uk.co.akm.test.motion.test.result.impl.DoubleResult;
 import uk.co.akm.test.motion.test.AbstractTestRun;
 
 /**
@@ -37,22 +39,22 @@ public final class ChargeNearMagnetTestRun extends AbstractTestRun {
     }
 
     @Override
-    public double exactResult(int index) {
+    public Result exactResult(int index) {
         switch (index) {
-            case LENGTH_INDEX: return exactLength;
+            case LENGTH_INDEX: return new DoubleResult(exactLength);
 
-            case Z_TRAVERSED_INDEX: return exactTraversedZ;
+            case Z_TRAVERSED_INDEX: return new DoubleResult(exactTraversedZ);
 
             default: throw new IllegalArgumentException("Illegal result index: " + index);
         }
     }
 
     @Override
-    public double approxResult(int index) {
+    public Result approxResult(int index) {
         switch (index) {
-            case LENGTH_INDEX: return particle.length();
+            case LENGTH_INDEX: return new DoubleResult(particle.length());
 
-            case Z_TRAVERSED_INDEX: return particle.z();
+            case Z_TRAVERSED_INDEX: return new DoubleResult(particle.z());
 
             default: throw new IllegalArgumentException("Illegal result index: " + index);
         }

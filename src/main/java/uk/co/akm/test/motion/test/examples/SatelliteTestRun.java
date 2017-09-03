@@ -2,6 +2,9 @@ package uk.co.akm.test.motion.test.examples;
 
 import uk.co.akm.test.motion.particle.Particle;
 import uk.co.akm.test.motion.particle.examples.Satellite;
+import uk.co.akm.test.motion.test.result.Result;
+import uk.co.akm.test.motion.test.result.impl.DoubleResult;
+import uk.co.akm.test.motion.test.result.impl.PointResult;
 import uk.co.akm.test.motion.test.AbstractTestRun;
 
 /**
@@ -9,9 +12,7 @@ import uk.co.akm.test.motion.test.AbstractTestRun;
  */
 public final class SatelliteTestRun extends AbstractTestRun {
     private static final int LENGTH_INDEX = 0;
-    private static final int END_X_INDEX = 1;
-    private static final int END_Y_INDEX = 2;
-    private static final int END_Z_INDEX = 3;
+    private static final int END_POINT_INDEX = 1;
 
     private final double v = 1;
     private final double r = 1;
@@ -25,7 +26,7 @@ public final class SatelliteTestRun extends AbstractTestRun {
     public SatelliteTestRun() {
         super(
                 new int[]{10, 100, 1000, 10000, 100000},
-                new String[]{"length", "~length", "length error fraction", "end-x", "~end-x", "end-x error fraction", "end-y", "~end-y", "end-y error", "end-z", "~end-z", "end-z error"}
+                new String[]{"length", "~length", "length error fraction", "end-point", "~end-point", "end-point error fraction"}
         );
     }
 
@@ -40,41 +41,24 @@ public final class SatelliteTestRun extends AbstractTestRun {
     }
 
     @Override
-    public double exactResult(int index) {
+    public Result exactResult(int index) {
         switch (index) {
-            case LENGTH_INDEX: return l;
+            case LENGTH_INDEX: return new DoubleResult(l);
 
-            case END_X_INDEX: return r;
-
-            case END_Y_INDEX:
-            case END_Z_INDEX: return 0;
+            case END_POINT_INDEX: return new PointResult(r, 0, 0);
 
             default: throw new IllegalArgumentException("Illegal result index: " + index);
         }
     }
 
     @Override
-    public double approxResult(int index) {
+    public Result approxResult(int index) {
         switch (index) {
-            case LENGTH_INDEX: return particle.length();
+            case LENGTH_INDEX: return new DoubleResult(particle.length());
 
-            case END_X_INDEX: return particle.x();
-
-            case END_Y_INDEX: return particle.y();
-
-            case END_Z_INDEX: return particle.z();
+            case END_POINT_INDEX: return new PointResult(particle);
 
             default: throw new IllegalArgumentException("Illegal result index: " + index);
-        }
-    }
-
-    @Override
-    public double resultErrorFraction(int index) {
-        switch (index) {
-            case END_Y_INDEX:
-            case END_Z_INDEX: return approxResult(index); // Cannot get error fraction, since exact result is zero.
-
-            default: return super.resultErrorFraction(index);
         }
     }
 }
