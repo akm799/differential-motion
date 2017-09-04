@@ -4,10 +4,7 @@ import uk.co.akm.test.motion.format.FixedWidthTextTable;
 import uk.co.akm.test.motion.format.TextTable;
 import uk.co.akm.test.motion.test.TestRun;
 import uk.co.akm.test.motion.test.TestRunner;
-import uk.co.akm.test.motion.test.examples.ChargeNearMagnetTestRun;
-import uk.co.akm.test.motion.test.examples.FirecrackerTestRun;
-import uk.co.akm.test.motion.test.examples.ProjectileTestRun;
-import uk.co.akm.test.motion.test.examples.SatelliteTestRun;
+import uk.co.akm.test.motion.test.examples.*;
 
 /**
  * Created by Thanos Mavroidis on 02/09/2017.
@@ -27,6 +24,9 @@ public class App {
         System.out.println();
 
         runTest("Projectile", new ProjectileTestRun());
+        System.out.println();
+
+        runTest("Free fall in air", new FreeFallInAirTestRun());
         System.out.println();
 
         runTest("Satellite", new SatelliteTestRun());
