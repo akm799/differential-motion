@@ -39,11 +39,12 @@ final class MidPointRootFinder {
             nSteps++;
         }
 
+        final double result = (xMin + (xMax - xMin)/2);
         if (nSteps > maxSteps) {
-            throw new ArithmeticException("Failed to converge with the required minimum range " + minRange + " after " + maxSteps + " steps.");
+            throw new ArithmeticException("Failed to converge with the required minimum range " + minRange + " after " + maxSteps + " steps. Last result: " + result);
         }
 
-        return (xMin + (xMax - xMin)/2);
+        return result;
     }
 
     private void checkRange(Function function, double xMin, double xMax) {

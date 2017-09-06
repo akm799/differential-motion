@@ -41,7 +41,7 @@ final class NewtonRaphsonRootFinder {
         }
 
         if (nSteps > maxSteps) {
-            throw new ArithmeticException("Failed to converge with the required minimum improvement " + minImprovement + " after " + maxSteps + " steps.");
+            throw new ArithmeticException("Failed to converge with the required minimum improvement " + minImprovement + " after " + maxSteps + " steps. Last result: " + xn);
         }
 
         return xn;
