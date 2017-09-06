@@ -1,15 +1,15 @@
 package uk.co.akm.test.motion.root;
 
-public class NewtonRaphsonRootFinder {
+final class NewtonRaphsonRootFinder {
     private static final int MAX_STEPS_DEFAULT = 100;
 
     private final int maxSteps;
 
-    public NewtonRaphsonRootFinder() {
+    NewtonRaphsonRootFinder() {
         this(MAX_STEPS_DEFAULT);
     }
 
-    public NewtonRaphsonRootFinder(int maxSteps) {
+    NewtonRaphsonRootFinder(int maxSteps) {
         if (maxSteps <= 0) {
             throw new IllegalArgumentException("Illegal 'maxSteps' argument: " + maxSteps + ". 'maxSteps' must be positive.");
         }
@@ -17,7 +17,7 @@ public class NewtonRaphsonRootFinder {
         this.maxSteps = maxSteps;
     }
 
-    public double findRoot(Function function, Function derivative, double rootApproximation, double minImprovement) {
+    double findRoot(Function function, Function derivative, double rootApproximation, double minImprovement) {
         double xn = Double.MAX_VALUE;
         double xnm1 = rootApproximation;
         double diff = Double.MAX_VALUE;
@@ -45,37 +45,5 @@ public class NewtonRaphsonRootFinder {
         }
 
         return xn;
-    }
-
-    //TODO Move to unit tests.
-    public static void main(String[] args) {
-        sinTest();
-        lnTest();
-    }
-
-    private static void sinTest() {
-        final Function sin = (x -> Math.sin(x));
-        final Function cos = (x -> Math.cos(x));
-        final double x0 = 3*Math.PI/4;
-        final double minImprovement = 0.001;
-        final double exact = Math.PI;
-
-        test("sin(x)", sin, cos, x0, minImprovement, exact);
-    }
-
-    private static void lnTest() {
-        final Function ln = (x -> Math.log(x));
-        final Function inv = (x -> 1/x);
-        final double x0 = 2;
-        final double minImprovement = 0.0001;
-        final double exact = 1;
-
-        test("ln(x)", ln, inv, x0, minImprovement, exact);
-    }
-
-    private static void test(String title, Function function, Function derivative, double rootApproximation, double minImprovement, double exact) {
-        final NewtonRaphsonRootFinder underTest = new NewtonRaphsonRootFinder();
-        final double approx = underTest.findRoot(function, derivative, rootApproximation, minImprovement);
-        System.out.println(title + ":  exact=" + exact + " approx=" + approx + " error-fraction=" + Math.abs((exact - approx))/exact);
     }
 }
