@@ -29,6 +29,9 @@ public class App {
         runTest("Free fall in air", new FreeFallInAirTestRun());
         System.out.println();
 
+        runTest("Projectile in air", new ProjectileInAirTestRun());
+        System.out.println();
+
         runTest("Satellite", new SatelliteTestRun());
         System.out.println();
 
