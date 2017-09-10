@@ -32,6 +32,9 @@ public class App {
         runTest("Projectile in air", new ProjectileInAirTestRun());
         System.out.println();
 
+        runTest("Projectile in wind", new ProjectileInWindTestRun());
+        System.out.println();
+
         runTest("Satellite", new SatelliteTestRun());
         System.out.println();
 
