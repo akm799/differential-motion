@@ -2,135 +2,31 @@ package uk.co.akm.test.motion.test.examples;
 
 import uk.co.akm.test.motion.particle.Particle;
 import uk.co.akm.test.motion.particle.examples.ProjectileInWind;
-import uk.co.akm.test.motion.root.Function;
-import uk.co.akm.test.motion.root.RootFinder;
-import uk.co.akm.test.motion.test.AbstractTestRun;
-import uk.co.akm.test.motion.test.result.Result;
 import uk.co.akm.test.motion.test.result.impl.PointResult;
 
 /**
  * Created by Thanos Mavroidis on 10/09/2017.
  */
-public final class ProjectileInWindTestRun extends AbstractTestRun {
-    private final double g = 9.81;
-    private final double k = 0.0654; // Should give terminal velocity of 150 m/s.
-    private final double v0 = 100;
-    private final double launchAngle = Math.PI/4; // 45 degree launch angle.
-    private final double vx0 = v0*Math.cos(launchAngle);
-    private final double vy0 = v0*Math.sin(launchAngle);
+public final class ProjectileInWindTestRun extends AbstractProjectileInAirTestRun {
     private final double vw = 10; // Wind speed
     private final double windAngle = Math.PI/4; // 45 degree wind angle measured from the x-axis to z-axis.
     private final double vwx = vw*Math.cos(windAngle);
     private final double vwz = vw*Math.sin(windAngle);
 
-    private final double gok = g/k;
+    protected PointResult evaluateTarget(double timeOfFlight) {
+        final double x = targetHorizontalCoordinate(vx0, vwx, timeOfFlight);
+        final double z = targetHorizontalCoordinate(0, vwz, timeOfFlight);
 
-    private final double xTarget;
-    private final double zTarget;
-    private final double timeOfFlight;
-
-    private final double oneTenthOfAMilliSec = 0.0001;
-    private final RootFinder rootFinder = new RootFinder();
-
-    public ProjectileInWindTestRun() {
-        super(
-                new int[]{10, 100, 1000, 10000, 100000, 1000000, 10000000},
-                new String[]{"end-point", "~end-point", "end-point error fraction"}
-        );
-
-        this.timeOfFlight = evaluateTimeOfFlight();
-        this.xTarget = targetHorizontalCoordinate(vx0, vwx, timeOfFlight);
-        this.zTarget = targetHorizontalCoordinate(0, vwz, timeOfFlight);
+        return new PointResult(x, 0, z);
     }
 
     private double targetHorizontalCoordinate(double v0, double vw, double t) {
         return (v0 - vw)*(1 - Math.exp(-k*t))/k + vw*t;
     }
 
-    private double evaluateTimeOfFlight() {
-        final double tUp = -Math.log(gok/(vy0 + gok))/k; // Time of flight from zero to maximum height.
-        final double tDown = evaluateDescentTime(tUp); // Time of flight from maximum height back to zero (needs to be evaluated numerically).
-
-        return (tUp + tDown);
-    }
-
-    /**
-     * Compute the time of flight from maximum height back to zero. We cannot use a formula because we need to numerically
-     * solve a transcendental equation with no analytical solution.
-     */
-    private double evaluateDescentTime(double ascendTime) {
-        final double tMin = 0;
-        final double tMax = 3*ascendTime;
-        final Function function = new Y(g, k, vy0, ascendTime);
-        final Function derivative = new VY(g, k);
-
-        return rootFinder.findRoot(function, derivative, tMin, tMax, oneTenthOfAMilliSec);
-    }
-
-    @Override
-    protected double duration() {
-        return timeOfFlight;
-    }
-
     @Override
     protected Particle initialState() {
         return new ProjectileInWind(g, k, vwx, vwz, vx0, vy0, 0, 0, 0, 0);
-    }
-
-    @Override
-    public Result exactResult(int index) {
-        return new PointResult(xTarget, 0, zTarget);
-    }
-
-    @Override
-    public Result approxResult(int index) {
-        return new PointResult(particle);
-    }
-
-    /**
-     * The y(t) function of the descending projectile from y(0)=h to y(td)=0, where h is the maximum height reached and
-     * td is the descend time. We need this because we are going to use it to obtain a numerical solution for td.
-     */
-    private static class Y implements Function {
-        private final double k;
-
-        private final double gok;
-        private final double invk;
-
-        private final double maxHeight;
-
-        private Y(double g, double k, double vy0, double ascendTime) {
-            this.k = k;
-            this.gok = g/k;
-            this.invk = 1/k;
-            this.maxHeight = invk*(vy0 + gok)*(1 - Math.exp(-k*ascendTime)) - gok * ascendTime;
-        }
-
-        @Override
-        public double f(double t) {
-            return maxHeight + invk*gok*(1 - Math.exp(-k*t)) - gok * t;
-        }
-    }
-
-    /**
-     * The vy(t) function of the descending projectile from vy(0)=0 to vy(td)=v, where td is the descend time. This
-     * function is the derivative of the y(t) function of the descending projectile from y(0)=h to y(td)=0, where h is
-     * the maximum height reached. We need this derivative because we are going to use it to obtain a numerical solution
-     * for y(td)=0 (for our numerical solution both the function y(t) and its derivative vy(t) are required).
-     */
-    private static class VY implements Function {
-        private final double k;
-        private final double gok;
-
-        public VY(double g, double k) {
-            this.k = k;
-            this.gok = g/k;
-        }
-
-        @Override
-        public double f(double t) {
-            return Math.exp(-k*t)*gok - gok;
-        }
     }
 }
 
