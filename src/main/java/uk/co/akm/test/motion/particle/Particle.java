@@ -7,6 +7,8 @@ package uk.co.akm.test.motion.particle;
  * Created by Thanos Mavroidis on 02/09/2017.
  */
 public abstract class Particle implements State {
+    private static final boolean PARABOLIC_APPROXIMATION = false;
+
     protected double ax; // current x-axis acceleration component
     protected double ay; // current y-axis acceleration component
     protected double az; // current z-axis acceleration component
@@ -79,7 +81,19 @@ public abstract class Particle implements State {
         y += dy;
         z += dz;
 
-        l += Math.sqrt(dx*dx + dy*dy + dz*dz);
+        final double dl = (PARABOLIC_APPROXIMATION ? parabolicLengthApproximation(ax, ay, az, dt) : linearLengthApproximation(dx, dy, dz));
+        l += dl;
+    }
+
+    // Simpler length estimation approximation which also is quicker to calculate.
+    private double linearLengthApproximation(double dx, double dy, double dz) {
+        return Math.sqrt(dx*dx + dy*dy + dz*dz);
+    }
+
+    // Better length estimation approximation, which should, generally, give better
+    // results, but which takes much longer to calculate.
+    private double parabolicLengthApproximation(double ax, double ay, double az, double dt) {
+        return LengthEstimator.parabolicArcLength(Math.sqrt(ax*ax + ay*ay + az*az), dt);
     }
 
     @Override
