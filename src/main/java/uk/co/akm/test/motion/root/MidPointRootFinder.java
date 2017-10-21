@@ -49,7 +49,7 @@ final class MidPointRootFinder {
 
     private void checkRange(Function function, double xMin, double xMax) {
         if (xMin >= xMax) {
-            throw new ArithmeticException("Invalid range [" + xMin + ", " + xMax + "]. The minimum must ge less than the maximum.");
+            throw new ArithmeticException("Invalid range [" + xMin + ", " + xMax + "]. The minimum must be less than the maximum.");
         }
 
         if (!rangeContainsRoot(function, xMin, xMax)) {

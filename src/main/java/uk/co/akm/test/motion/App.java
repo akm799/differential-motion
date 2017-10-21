@@ -39,6 +39,9 @@ public class App {
         System.out.println();
 
         runTest("Charged particle in magnetic field", new ChargeNearMagnetTestRun());
+        System.out.println();
+
+        runTest("Particle race", new ParticleRaceTestRun());
     }
 
     private void runTest(String title, TestRun testRun) {
