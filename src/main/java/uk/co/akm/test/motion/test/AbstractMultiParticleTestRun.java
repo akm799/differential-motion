@@ -40,13 +40,13 @@ public abstract class AbstractMultiParticleTestRun implements TestRun {
     @Override
     public final void runTest(int n) {
         final double t = duration();
-        particles = initialState();
+        particles = initialStates();
         MotionIntegrator.integrateMotion(particles, t, n);
     }
 
     protected abstract double duration();
 
-    protected abstract Particle[] initialState();
+    protected abstract Particle[] initialStates();
 
     @Override
     public final double resultErrorFraction(int index) {

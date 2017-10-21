@@ -6,23 +6,9 @@ package uk.co.akm.test.motion.particle;
 public class MotionIntegrator {
 
     /**
-     * Performs the basic numerical integration to update the final particle state.
+     * Performs the basic numerical integration to update the final particle states.
      *
-     * @param movingParticle the particle whose sate will be updated
-     * @param timePeriod the total time over which to integrate
-     * @param nSteps the number of integration steps
-     */
-    public static void integrateMotion(Particle movingParticle, double timePeriod, int nSteps) {
-        final double dt = timePeriod/nSteps;
-        for (int i=0 ; i<nSteps ; i++) {
-            movingParticle.update(dt);
-        }
-    }
-
-    /**
-     * Performs the basic numerical integration to update the final particles state.
-     *
-     * @param movingParticles the particles whose sate will be updated
+     * @param movingParticles the particles whose states will be updated
      * @param timePeriod the total time over which to integrate
      * @param nSteps the number of integration steps
      */

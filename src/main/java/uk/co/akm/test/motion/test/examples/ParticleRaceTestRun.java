@@ -77,7 +77,7 @@ public class ParticleRaceTestRun extends AbstractMultiParticleTestRun {
     }
 
     @Override
-    protected Particle[] initialState() {
+    protected Particle[] initialStates() {
         return new Particle[]{
                 new ParticleWithMassInAir(mFree, f, 0),
                 new ParticleWithMassInAir(mAir, f, k)
