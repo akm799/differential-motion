@@ -85,6 +85,32 @@ public abstract class Particle implements State {
         l += dl;
     }
 
+    // This should, generally, yield better results (but take longer to calculate).
+    private void updateVelocityAndPositionImproved(double dt) {
+        final double dvx = ax*dt;
+        final double dvy = ay*dt;
+        final double dvz = az*dt;
+
+        final double vxm = vx + dvx/2;
+        final double vym = vy + dvy/2;
+        final double vzm = vz + dvz/2;
+
+        vx += dvx;
+        vy += dvy;
+        vz += dvz;
+
+        final double dx = vxm*dt;
+        final double dy = vym*dt;
+        final double dz = vzm*dt;
+
+        x += dx;
+        y += dy;
+        z += dz;
+
+        final double dl = (PARABOLIC_APPROXIMATION ? parabolicLengthApproximation(ax, ay, az, dt) : linearLengthApproximation(dx, dy, dz));
+        l += dl;
+    }
+
     // Simpler length estimation approximation which also is quicker to calculate.
     private double linearLengthApproximation(double dx, double dy, double dz) {
         return Math.sqrt(dx*dx + dy*dy + dz*dz);
