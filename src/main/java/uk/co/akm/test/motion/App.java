@@ -42,6 +42,9 @@ public class App {
         System.out.println();
 
         runTest("Particle race", new ParticleRaceTestRun());
+        System.out.println();
+
+        runTest("Slowdown in air", new SlowDownInAirTestRun());
     }
 
     private void runTest(String title, TestRun testRun) {
