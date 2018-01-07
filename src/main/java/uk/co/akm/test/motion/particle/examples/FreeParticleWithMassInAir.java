@@ -12,8 +12,7 @@ import uk.co.akm.test.motion.particle.Particle;
  * Created by Thanos Mavroidis on 07/01/2018.
  */
 public final class FreeParticleWithMassInAir extends Particle {
-    private final double m;
-    private final double k;
+    private final double c;
 
     /**
      * @param m the particle mass
@@ -23,12 +22,11 @@ public final class FreeParticleWithMassInAir extends Particle {
     public FreeParticleWithMassInAir(double m, double k, double vx0) {
         super(vx0, 0, 0, 0, 0, 0);
 
-        this.m = m;
-        this.k = k;
+        this.c = k/m;
     }
 
     @Override
     protected void updateAcceleration(double dt) {
-        ax = -k*vx()/m;
+        ax = -c*vx();
     }
 }

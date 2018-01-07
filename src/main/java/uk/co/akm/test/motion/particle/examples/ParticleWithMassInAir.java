@@ -8,7 +8,7 @@ import uk.co.akm.test.motion.particle.Particle;
  *
  * Created by Thanos Mavroidis on 21/10/2017.
  */
-public class ParticleWithMassInAir extends Particle {
+public final class ParticleWithMassInAir extends Particle {
     private final double m;
     private final double f;
     private final double k;
