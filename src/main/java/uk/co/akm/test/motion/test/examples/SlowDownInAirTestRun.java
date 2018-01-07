@@ -14,12 +14,12 @@ public final class SlowDownInAirTestRun extends AbstractTestRun {
     private static final int TERMINAL_VELOCITY_INDEX = 0;
     private static final int ENDPOINT_INDEX = 1;
 
-    private final double v0 = 2.5; // Initial velocity of 2.5 m/sec
+    private final double v0 = 2.5; // Initial velocity of 2.5 m/sec or 9 km/h
     private final double m = 168;
-    private final double k = 10; // Should give maximum distance of 42 metres.
+    private final double k = 10;
     private final double t = 1000; // Sufficiently long time to allow (near) reach of the zero terminal velocity.
     private final double vt = 0;
-    private final double xLimit = v0*m/k;
+    private final double xLimit = m*(1 + Math.log(v0))/k;
 
     public SlowDownInAirTestRun() {
         super(
