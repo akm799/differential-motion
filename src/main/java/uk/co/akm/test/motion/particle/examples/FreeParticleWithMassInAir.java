@@ -7,7 +7,7 @@ import uk.co.akm.test.motion.particle.Particle;
  * speed. The initial particle speed is vx0 and the initial particle position is 0.
  *
  * //TODO Change the particle behaviour to be as it is at low speeds but to exhibit a resistance proportional to the
- * //TODO paticle speed squared, at high speeds.
+ * //TODO particle speed squared, at high speeds.
  *
  * Created by Thanos Mavroidis on 07/01/2018.
  */
