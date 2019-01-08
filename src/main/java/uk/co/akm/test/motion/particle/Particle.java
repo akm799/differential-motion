@@ -25,6 +25,10 @@ public abstract class Particle implements State {
 
     private double t; // current time
 
+    private final boolean quadSpace;
+
+    private StateMonitor stateMonitor;
+
     /**
      * Creates a particle in some initial state defined by the constructor arguments.
      *
@@ -36,6 +40,20 @@ public abstract class Particle implements State {
      * @param z0 the initial z-axis position
      */
     protected Particle(double vx0, double vy0, double vz0, double x0, double y0, double z0) {
+        this(vx0, vy0, vz0, x0, y0, z0, false);
+    }
+
+    /**
+     * Creates a particle in some initial state defined by the constructor arguments.
+     *
+     * @param vx0 the initial velocity along the x-axis
+     * @param vy0 the initial velocity along the y-axis
+     * @param vz0 the initial velocity along the z-axis
+     * @param x0 the initial x-axis position
+     * @param y0 the initial y-axis position
+     * @param z0 the initial z-axis position
+     */
+    protected Particle(double vx0, double vy0, double vz0, double x0, double y0, double z0, boolean quadSpace) {
         this.ax = 0;
         this.ay = 0;
         this.az = 0;
@@ -46,6 +64,8 @@ public abstract class Particle implements State {
         this.y = y0;
         this.z = z0;
         this.t = 0;
+
+        this.quadSpace = quadSpace;
     }
 
     /**
@@ -54,6 +74,11 @@ public abstract class Particle implements State {
      * @param dt the small time increment
      */
     public final void update(double dt) {
+        updateState(dt);
+        informListenerOfUpdate();
+    }
+
+    private void updateState(double dt) {
         updateAcceleration(dt);
         updateVelocityAndPosition(dt);
         t += dt;
@@ -69,6 +94,14 @@ public abstract class Particle implements State {
     protected abstract void updateAcceleration(double dt);
 
     private void updateVelocityAndPosition(double dt) {
+        if (quadSpace) {
+            updateVelocityAndPositionQuadSpace(dt);
+        } else {
+            updateVelocityAndPositionLinSpace(dt);
+        }
+    }
+
+    private void updateVelocityAndPositionLinSpace(double dt) {
         vx += ax*dt;
         vy += ay*dt;
         vz += az*dt;
@@ -86,7 +119,7 @@ public abstract class Particle implements State {
     }
 
     // This should, generally, yield better results (but take longer to calculate).
-    private void updateVelocityAndPositionImproved(double dt) {
+    private void updateVelocityAndPositionQuadSpace(double dt) {
         final double dvx = ax*dt;
         final double dvy = ay*dt;
         final double dvz = az*dt;
@@ -120,6 +153,12 @@ public abstract class Particle implements State {
     // results, but which takes much longer to calculate.
     private double parabolicLengthApproximation(double ax, double ay, double az, double dt) {
         return LengthEstimator.parabolicArcLength(Math.sqrt(ax*ax + ay*ay + az*az), dt);
+    }
+
+    private void informListenerOfUpdate() {
+        if (stateMonitor != null) {
+            stateMonitor.stateUpdated(this);
+        }
     }
 
     @Override
@@ -175,5 +214,13 @@ public abstract class Particle implements State {
     @Override
     public final double t() {
         return t;
+    }
+
+    public final void setStateMonitor(StateMonitor stateMonitor) {
+        this.stateMonitor = stateMonitor;
+    }
+
+    public final void removeStateMonitor() {
+        setStateMonitor(null);
     }
 }
