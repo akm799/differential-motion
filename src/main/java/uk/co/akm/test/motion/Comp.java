@@ -4,7 +4,7 @@ import uk.co.akm.test.motion.particle.State;
 import uk.co.akm.test.motion.test.comp.StateComparisonTest;
 import uk.co.akm.test.motion.test.comp.StateComparisonTestRunner;
 import uk.co.akm.test.motion.test.comp.StateSingleValueSelector;
-import uk.co.akm.test.motion.test.comp.examples.FreeFallingComparisonTest;
+import uk.co.akm.test.motion.test.comp.examples.FreeFallComparisonTest;
 
 /**
  * Created by Thanos Mavroidis on 10/01/2019.
@@ -32,6 +32,9 @@ public class Comp {
         final double duration = 10;
         final int[] numberOfSteps = {10, 100, 1000, 10000};
 
+        System.out.println("Free fall comparison tests");
+        System.out.println("\n");
+
         System.out.println("Linear space-change approximation:");
         runTest(numberOfSteps, duration, freeFallSpaceLinTest);
         System.out.println("");
@@ -50,15 +53,16 @@ public class Comp {
 
     private StateComparisonTest<Double> buildFreeFallSpaceTest(boolean quadSpace) {
         final StateSingleValueSelector ySelector = (State state) -> state.y();
-        return new FreeFallingComparisonTest(9.81, 1000, quadSpace, "Free falling particle space", "Average y-coordinate difference", ySelector);
+        return new FreeFallComparisonTest(1000, quadSpace, "Free falling particle displacement", "Average y-coordinate difference", ySelector);
     }
 
     private StateComparisonTest<Double> buildFreeFallVelocityTest(boolean quadSpace) {
         final StateSingleValueSelector ySelector = (State state) -> state.vy();
-        return new FreeFallingComparisonTest(9.81, 1000, quadSpace, "Free falling particle velocity", "Average y-velocity difference", ySelector);
+        return new FreeFallComparisonTest(1000, quadSpace, "Free falling particle velocity", "Average y-velocity difference", ySelector);
     }
 
     private void runTest(int[] numberOfSteps, double duration, StateComparisonTest test) {
+        System.out.println(test.title() + " - " + test.resultDescription() + ":");
         for (int n: numberOfSteps) {
             runTest(n, duration, test);
         }
@@ -67,7 +71,6 @@ public class Comp {
     private void runTest(int numberOfSteps, double duration, StateComparisonTest test) {
         final StateComparisonTestRunner testRunner = new StateComparisonTestRunner(test);
         testRunner.runComparisonTests(numberOfSteps, duration);
-        System.out.println("dt=" + (duration/numberOfSteps));
-        System.out.println(test.title() + " test: " + test.result().getComparisonResult());
+        System.out.println("dt=" + (duration/numberOfSteps) + " result=" + test.result().getComparisonResult());
     }
 }

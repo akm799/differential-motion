@@ -11,17 +11,16 @@ import uk.co.akm.test.motion.test.comp.StateSingleValueSelector;
 /**
  * Created by Thanos Mavroidis on 09/01/2019.
  */
-public final class FreeFallingComparisonTest implements StateComparisonTest<Double> {
-    private final double g;
+public final class FreeFallComparisonTest implements StateComparisonTest<Double> {
+    private final double g = 9.81;
+
     private final double y0;
     private final boolean quadSpace;
     private final String title;
     private final String resultDescription;
-
     private final AverageDifference yDifference;
 
-    public FreeFallingComparisonTest(double g, double y0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
-        this.g = g;
+    public FreeFallComparisonTest(double y0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
         this.y0 = y0;
         this.quadSpace = quadSpace;
         this.title = title;
