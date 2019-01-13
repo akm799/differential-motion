@@ -9,6 +9,8 @@ public interface StateComparisonTest<T> {
 
     String title();
 
+    String resultDescription();
+
     ComparisonParticle initialState();
 
     StateComparisonResult<T> result();

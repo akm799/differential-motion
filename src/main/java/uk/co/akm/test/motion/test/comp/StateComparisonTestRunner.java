@@ -9,6 +9,10 @@ import uk.co.akm.test.motion.particle.Particle;
 public class StateComparisonTestRunner {
     private final StateComparisonTest[] tests;
 
+    public StateComparisonTestRunner(StateComparisonTest test) {
+        this(new StateComparisonTest[]{test});
+    }
+
     public StateComparisonTestRunner(StateComparisonTest[] tests) {
         this.tests = tests;
     }

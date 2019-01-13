@@ -19,24 +19,55 @@ public class Comp {
     private Comp() {}
 
     private void runAllTests() {
-        final StateComparisonTest<Double> freeFallingSpaceTest = buildFreeFallingSpaceTest();
-        final StateComparisonTest<Double> freeFallingVelocityTest = buildFreeFallingVelocityTest();
-
-        final StateComparisonTest[] tests = new StateComparisonTest[]{freeFallingSpaceTest, freeFallingVelocityTest};
-        final StateComparisonTestRunner testRunner = new StateComparisonTestRunner(tests);
-        testRunner.runComparisonTests(10, 10);
-
-        System.out.println(freeFallingSpaceTest.title() + " test: Average y difference is " + freeFallingSpaceTest.result().getComparisonResult());
-        System.out.println(freeFallingSpaceTest.title() + " test: Average y-velocity difference is " + freeFallingVelocityTest.result().getComparisonResult());
+        runFreeFallTests();
     }
 
-    private StateComparisonTest<Double> buildFreeFallingSpaceTest() {
+    private void runFreeFallTests() {
+        final StateComparisonTest<Double> freeFallSpaceLinTest = buildFreeFallSpaceTest(false);
+        final StateComparisonTest<Double> freeFallVelocityLinTest = buildFreeFallVelocityTest(false);
+
+        final StateComparisonTest<Double> freeFallSpaceQuadTest = buildFreeFallSpaceTest(true);
+        final StateComparisonTest<Double> freeFallVelocityQuadTest = buildFreeFallVelocityTest(true);
+
+        final double duration = 10;
+        final int[] numberOfSteps = {10, 100, 1000, 10000};
+
+        System.out.println("Linear space-change approximation:");
+        runTest(numberOfSteps, duration, freeFallSpaceLinTest);
+        System.out.println("");
+
+        System.out.println("Quadratic space-change approximation:");
+        runTest(numberOfSteps, duration, freeFallSpaceQuadTest);
+        System.out.println("\n");
+
+        System.out.println("Linear velocity-change approximation:");
+        runTest(numberOfSteps, duration, freeFallVelocityLinTest);
+        System.out.println("");
+
+        System.out.println("Quadratic velocity-change approximation:");
+        runTest(numberOfSteps, duration, freeFallVelocityQuadTest);
+    }
+
+    private StateComparisonTest<Double> buildFreeFallSpaceTest(boolean quadSpace) {
         final StateSingleValueSelector ySelector = (State state) -> state.y();
-        return new FreeFallingComparisonTest(9.81, 1000, true, "Free falling particle space", ySelector);
+        return new FreeFallingComparisonTest(9.81, 1000, quadSpace, "Free falling particle space", "Average y-coordinate difference", ySelector);
     }
 
-    private StateComparisonTest<Double> buildFreeFallingVelocityTest() {
+    private StateComparisonTest<Double> buildFreeFallVelocityTest(boolean quadSpace) {
         final StateSingleValueSelector ySelector = (State state) -> state.vy();
-        return new FreeFallingComparisonTest(9.81, 1000, false, "Free falling particle velocity", ySelector);
+        return new FreeFallingComparisonTest(9.81, 1000, quadSpace, "Free falling particle velocity", "Average y-velocity difference", ySelector);
+    }
+
+    private void runTest(int[] numberOfSteps, double duration, StateComparisonTest test) {
+        for (int n: numberOfSteps) {
+            runTest(n, duration, test);
+        }
+    }
+
+    private void runTest(int numberOfSteps, double duration, StateComparisonTest test) {
+        final StateComparisonTestRunner testRunner = new StateComparisonTestRunner(test);
+        testRunner.runComparisonTests(numberOfSteps, duration);
+        System.out.println("dt=" + (duration/numberOfSteps));
+        System.out.println(test.title() + " test: " + test.result().getComparisonResult());
     }
 }

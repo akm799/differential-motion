@@ -16,14 +16,16 @@ public final class FreeFallingComparisonTest implements StateComparisonTest<Doub
     private final double y0;
     private final boolean quadSpace;
     private final String title;
+    private final String resultDescription;
 
     private final AverageDifference yDifference;
 
-    public FreeFallingComparisonTest(double g, double y0, boolean quadSpace, String title, StateSingleValueSelector valueSelector) {
+    public FreeFallingComparisonTest(double g, double y0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
         this.g = g;
         this.y0 = y0;
         this.quadSpace = quadSpace;
         this.title = title;
+        this.resultDescription = resultDescription;
         this.yDifference = buildYDifference(valueSelector);
     }
 
@@ -34,6 +36,11 @@ public final class FreeFallingComparisonTest implements StateComparisonTest<Doub
     @Override
     public String title() {
         return title;
+    }
+
+    @Override
+    public String resultDescription() {
+        return resultDescription;
     }
 
     @Override
