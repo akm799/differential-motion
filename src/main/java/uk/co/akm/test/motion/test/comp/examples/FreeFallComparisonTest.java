@@ -18,14 +18,14 @@ public final class FreeFallComparisonTest implements StateComparisonTest<Double>
     private final boolean quadSpace;
     private final String title;
     private final String resultDescription;
-    private final AverageDifference yDifference;
+    private final AverageDifference difference;
 
     public FreeFallComparisonTest(double y0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
         this.y0 = y0;
         this.quadSpace = quadSpace;
         this.title = title;
         this.resultDescription = resultDescription;
-        this.yDifference = buildYDifference(valueSelector);
+        this.difference = buildYDifference(valueSelector);
     }
 
     private AverageDifference buildYDifference(StateSingleValueSelector valueSelector) {
@@ -45,14 +45,14 @@ public final class FreeFallComparisonTest implements StateComparisonTest<Double>
     @Override
     public ComparisonParticle initialState() {
         final ComparisonParticle particle = new FreeFallingParticle(g, y0, quadSpace);
-        particle.setComparator(yDifference);
+        particle.setComparator(difference);
 
         return particle;
     }
 
     @Override
     public StateComparisonResult<Double> result() {
-        return yDifference;
+        return difference;
     }
 
     private static final class FreeFallingParticle extends ComparisonParticle {
@@ -60,7 +60,7 @@ public final class FreeFallComparisonTest implements StateComparisonTest<Double>
         private final double ayOver2;
         private final MutableState exactState = new MutableState();
 
-        public FreeFallingParticle(double g, double y0, boolean quadSpace) {
+        FreeFallingParticle(double g, double y0, boolean quadSpace) {
             super(0, 0, 0, 0, y0, 0, quadSpace);
 
             this.ay = -g;
