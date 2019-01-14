@@ -58,22 +58,27 @@ public final class OscillatorComparisonTest implements StateComparisonTest<Doubl
     }
 
     private static final class Oscillator extends ComparisonParticle {
-        private final double k;
         private final double phi;
         private final double alpha;
         private final double omega;
+        private final double minusKOverM;
         private final double minusAlphaTimesOmega;
         private final MutableState exactState = new MutableState();
+
+        private final double m = 1; // Oscillator mass is 1 kg.
 
         Oscillator(double k, double vx0, double x0, boolean quadSpace) {
             super(0, 0, 0, x0, 0, 0, quadSpace);
 
-            final double m = 1; // Oscillator mass is 1 kg.
+            if (k <= 0) {
+                throw new IllegalArgumentException("Illegal restoring force constant k=" + k + ". Negative or zero values are not allowed.");
+            }
 
-            this.k = k;
             this.omega = Math.sqrt(k/m);
             this.phi = Math.atan(vx0/(omega*x0));
             this.alpha = x0/Math.cos(phi);
+
+            this.minusKOverM = -k/m;
             this.minusAlphaTimesOmega = -alpha*omega;
         }
 
@@ -89,7 +94,7 @@ public final class OscillatorComparisonTest implements StateComparisonTest<Doubl
 
         @Override
         protected void updateAcceleration(double dt) {
-            this.ax = -k*x();
+            this.ax = minusKOverM*x();
         }
     }
 }
