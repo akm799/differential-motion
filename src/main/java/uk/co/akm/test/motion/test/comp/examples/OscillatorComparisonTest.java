@@ -22,7 +22,9 @@ public final class OscillatorComparisonTest implements StateComparisonTest<Doubl
 
     private final String title;
     private final String resultDescription;
-    private final AverageDifference difference;
+    private final StateSingleValueSelector valueSelector;
+
+    private AverageDifference difference;
 
     public OscillatorComparisonTest(double k, double x0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
         this.k = k;
@@ -31,7 +33,7 @@ public final class OscillatorComparisonTest implements StateComparisonTest<Doubl
 
         this.title = title;
         this.resultDescription = resultDescription;
-        this.difference = new AverageDifference(valueSelector);
+        this.valueSelector = valueSelector;
     }
 
     @Override
@@ -46,6 +48,8 @@ public final class OscillatorComparisonTest implements StateComparisonTest<Doubl
 
     @Override
     public ComparisonParticle initialState() {
+        difference = new AverageDifference(valueSelector);
+
         final ComparisonParticle particle = new Oscillator(k, 0, x0, quadSpace);
         particle.setComparator(difference);
 

@@ -18,18 +18,16 @@ public final class FreeFallComparisonTest implements StateComparisonTest<Double>
     private final boolean quadSpace;
     private final String title;
     private final String resultDescription;
-    private final AverageDifference difference;
+    private final StateSingleValueSelector valueSelector;
+
+    private AverageDifference difference;
 
     public FreeFallComparisonTest(double y0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
         this.y0 = y0;
         this.quadSpace = quadSpace;
         this.title = title;
         this.resultDescription = resultDescription;
-        this.difference = buildYDifference(valueSelector);
-    }
-
-    private AverageDifference buildYDifference(StateSingleValueSelector valueSelector) {
-        return new AverageDifference(valueSelector);
+        this.valueSelector = valueSelector;
     }
 
     @Override
@@ -44,6 +42,8 @@ public final class FreeFallComparisonTest implements StateComparisonTest<Double>
 
     @Override
     public ComparisonParticle initialState() {
+        difference = new AverageDifference(valueSelector);
+
         final ComparisonParticle particle = new FreeFallingParticle(g, y0, quadSpace);
         particle.setComparator(difference);
 

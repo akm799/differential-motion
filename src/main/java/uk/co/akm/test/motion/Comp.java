@@ -63,7 +63,7 @@ public class Comp {
         final StateComparisonTest<Double> oscillatorVelocityQuadTest = buildOscillatorVelocityTest(true);
 
         final double duration = 10;
-        final int[] numberOfSteps = {10, 100, 1000, 10000};
+        final int[] numberOfSteps = {10, 100, 1000, 10000, 100000, 1000000};
 
         System.out.println("Oscillator comparison tests");
         System.out.println("---------------------------");
