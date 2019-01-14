@@ -3,10 +3,7 @@ package uk.co.akm.test.motion.test.comp.examples;
 import uk.co.akm.test.motion.comp.ComparisonParticle;
 import uk.co.akm.test.motion.comp.MutableState;
 import uk.co.akm.test.motion.particle.State;
-import uk.co.akm.test.motion.test.comp.AverageDifference;
-import uk.co.akm.test.motion.test.comp.StateComparisonResult;
-import uk.co.akm.test.motion.test.comp.StateComparisonTest;
-import uk.co.akm.test.motion.test.comp.StateSingleValueSelector;
+import uk.co.akm.test.motion.test.comp.*;
 
 /**
  * Oscillator executing a simple harmonic motion.
@@ -15,50 +12,20 @@ import uk.co.akm.test.motion.test.comp.StateSingleValueSelector;
  *
  * Created by Thanos Mavroidis on 13/01/2019.
  */
-public final class OscillatorComparisonTest implements StateComparisonTest<Double> {
+public final class OscillatorComparisonTest extends AbstractSingleValueDifferenceTest {
     private final double k;
     private final double x0;
-    private final boolean quadSpace;
-
-    private final String title;
-    private final String resultDescription;
-    private final StateSingleValueSelector valueSelector;
-
-    private AverageDifference difference;
 
     public OscillatorComparisonTest(double k, double x0, boolean quadSpace, String title, String resultDescription, StateSingleValueSelector valueSelector) {
+        super(quadSpace, title, resultDescription, valueSelector);
+
         this.k = k;
         this.x0 = x0;
-        this.quadSpace = quadSpace;
-
-        this.title = title;
-        this.resultDescription = resultDescription;
-        this.valueSelector = valueSelector;
     }
 
     @Override
-    public String title() {
-        return title;
-    }
-
-    @Override
-    public String resultDescription() {
-        return resultDescription;
-    }
-
-    @Override
-    public ComparisonParticle initialState() {
-        difference = new AverageDifference(valueSelector);
-
-        final ComparisonParticle particle = new Oscillator(k, 0, x0, quadSpace);
-        particle.setComparator(difference);
-
-        return particle;
-    }
-
-    @Override
-    public StateComparisonResult<Double> result() {
-        return difference;
+    protected final ComparisonParticle buildComparisonParticle(boolean quadSpace) {
+        return new Oscillator(k, 0, x0, quadSpace);
     }
 
     private static final class Oscillator extends ComparisonParticle {
